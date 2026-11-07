@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mail Downloader</title>
+  <link rel="icon" href="{{ url_for('static', filename='logo.svg') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <main class="wrap">
+    <header class="hero">
+      <img src="{{ url_for('static', filename='logo.svg') }}" alt="logo" class="logo">
+      <div>
+        <h1>Mail Downloader</h1>
+        <p class="sub">Descarga, verifica y organiza tu correo por mes — Gmail, Outlook, Yahoo, iCloud, Hostinger y más.</p>
+      </div>
+    </header>
+
+    <!-- 1. Conexión -->
+    <section class="card">
+      <h2><span class="step">1</span> Conexión</h2>
+      <div class="grid">
+        <label>Proveedor
+          <select id="provider">
+            <option value="gmail">Gmail</option>
+            <option value="outlook">Outlook / Office 365</option>
+            <option value="yahoo">Yahoo</option>
+            <option value="icloud">iCloud</option>
+            <option value="hostinger">Hostinger</option>
+            <option value="custom">Otro (IMAP personalizado)</option>
+          </select>
+        </label>
+        <label>Correo
+          <input id="email" type="email" autocomplete="username" placeholder="tucorreo@dominio.com">
+        </label>
+        <label class="pass">Contraseña
+          <span class="passrow">
+            <input id="password" type="password" autocomplete="current-password" placeholder="contraseña o App Password">
+            <button type="button" id="togglePass" class="ghost" title="Ver/ocultar">👁</button>
+          </span>
+        </label>
+        <div id="customBox" class="grid two hidden">
+          <label>Servidor IMAP (host)
+            <input id="host" type="text" placeholder="imap.midominio.com">
+          </label>
+          <label>Puerto
+            <input id="port" type="number" value="993">
+          </label>
+        </div>
+      </div>
+      <p id="appPassNote" class="note hidden">🔐 Este proveedor requiere una <b>Contraseña de aplicación</b> (App Password), no tu contraseña normal. Revisa el README para generarla.</p>
+      <div class="actions">
+        <button id="btnConnect" class="btn success">Conectar</button>
+        <span id="connInfo" class="muted"></span>
+      </div>
+    </section>
+
+    <!-- 2. Carpeta y periodo -->
+    <section class="card" id="card2" hidden>
+      <h2><span class="step">2</span> Carpeta y periodo</h2>
+      <div class="grid two">
+        <label>Carpeta
+          <select id="folder"></select>
+        </label>
+        <label>Periodo del mes
+          <select id="period">
+            <option value="todo">Todo el mes</option>
+            <option value="q1">1ª quincena (1-15)</option>
+            <option value="q2">2ª quincena (16-fin)</option>
+          </select>
+        </label>
+      </div>
+      <div class="actions">
+        <button id="btnReview" class="btn accent">Revisar meses</button>
+      </div>
+    </section>
+
+    <!-- 3. Meses -->
+    <section class="card" id="card3" hidden>
+      <div class="rowhead">
+        <h2><span class="step">3</span> Meses encontrados</h2>
+        <span id="selSummary" class="chip">0 meses · 0 correos</span>
+      </div>
+      <p class="muted small">Marca los meses que quieras descargar</p>
+      <div class="tablewrap">
+        <table id="monthsTable">
+          <thead><tr><th class="c"></th><th>Año</th><th>Mes</th><th class="r">Correos</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="actions wrap-actions">
+        <button id="btnAll" class="btn">Marcar todo</button>
+        <button id="btnNone" class="btn">Ninguno</button>
+        <label class="destlabel">Carpeta destino
+          <input id="dest" type="text" value="{{ destino_defecto }}">
+        </label>
+        <label class="danger-check">
+          <input id="delete" type="checkbox"> 🗑 Borrar del servidor tras verificar (irreversible)
+        </label>
+        <button id="btnDownload" class="btn accent big" disabled>⬇ Descargar seleccionados</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal de progreso -->
+  <div id="overlay" class="overlay hidden">
+    <div class="dialog">
+      <h3 id="dlgTitle">Descargando correos</h3>
+      <div class="donut-row">
+        <div class="donut" id="donut" style="--pct:0">
+          <span id="donutPct">0%</span>
+        </div>
+        <div class="donut-info">
+          <p id="dlgState" class="state">Preparando…</p>
+          <div class="bar"><div id="bar" class="barfill"></div></div>
+          <p id="dlgCount" class="muted small"></p>
+        </div>
+      </div>
+      <div class="actions end">
+        <button id="btnCancel" class="btn">Cancelar</button>
+        <button id="btnClose" class="btn accent hidden">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="foot">Corre localmente · tu contraseña nunca se guarda en disco</footer>
+
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

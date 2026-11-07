@@ -1,0 +1,26 @@
+# Entornos y cachés de Python
+venv/
+.venv/
+env/
+__pycache__/
+*.pyc
+*.pyo
+
+# NUNCA subir correos descargados ni datos privados
+*.eml
+*.mbox
+descargas/
+Descargas/
+Mail Downloader/
+correos/
+emails/
+
+# Logs y temporales
+*.log
+*.tmp
+
+# macOS / editores
+.DS_Store
+.idea/
+.vscode/
+*.swp
